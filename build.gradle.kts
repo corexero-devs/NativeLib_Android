@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
 }
-fun prop(name: String) = project.findProperty(name) as String
 
 android {
     namespace = "com.corexero.nativelib"
@@ -13,20 +12,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-
-        val debugSha = prop("DEBUG_CERT_SHA256")
-        val releaseSha = prop("RELEASE_CERT_SHA256")
-        val applicationId = prop("EXPECTED_PKG")
-        val allowedCerts = listOf(debugSha, releaseSha).joinToString(";")
-        externalNativeBuild {
-            cmake {
-                cppFlags("")
-                arguments += listOf(
-                    "-DEXPECTED_PKG=${applicationId}" ,
-                    "-DALLOWED_CERTS=${allowedCerts}"
-                )
-            }
-        }
     }
 
     buildTypes {
